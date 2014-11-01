@@ -1,0 +1,49 @@
+@import url(http://fonts.googleapis.com/css?family=Lato:300);
+
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+html, body {
+  font-family: 'Lato', sans-serif;
+  background-color: #14246E;
+  color: white;
+}
+
+h1 {
+  font-weight: lighter;
+  font-variant: small-caps;
+  margin: 0;
+  font-size: 3em;
+  text-align: center;
+}
+
+#edit {
+  width: 60%;
+  margin: 20px auto;
+}
+
+#img {
+  /*margin: 6px 0;*/
+  border: 6px solid #10BDD4;
+  background-color: white;
+  width: 100%;
+}
+
+#controls {
+  text-align: center;
+}
+#controls button {
+  margin: 6px;
+  background-color: white;
+  border: 6px solid #10BDD4;
+  padding: 1em 2em;
+}
+#controls button:hover {
+  border: 6px solid #0c90a1;
+  background-color: #9ccdd4;
+  cursor: pointer;
+}
