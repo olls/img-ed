@@ -18,6 +18,7 @@ img_ed.controls = {
   load: {
     name: 'Load',
     func: function (e) {
+      img_ed.load_img('http://localhost/projects/dvbris.com/build/images/logo.png');
       console.log('Load');
     }
   },
@@ -36,23 +37,32 @@ img_ed.controls = {
 };
 
 img_ed.add_controls = function (elem) {
-  var controls = this.controls;
-  Object.keys(controls).forEach(function (key) {
-    var control = controls[key];
+  var t = this;
+  Object.keys(t.controls).forEach(function (key) {
+    var control = t.controls[key];
     
     var btn = document.createElement('button');
     
     btn.innerHTML = control.name;
-    btn.addEventListener('click', (function (control) {
+    on('click', btn, (function (control) {
       return function (e) {
         control.func(e);
         e.preventDefault();
         return false;
       };
-    })(control), false);
+    })(control));
     
     elem.appendChild(btn);
   });  
+}
+
+img_ed.load_img = function (img_s) {
+  var t = this;
+  var img = new Image();
+  on('load', img, function (e) {
+    t.cxt.drawImage(img, 0, 0);
+  });
+  img.src = img_s;
 }
 
 img_ed.main = function () {
