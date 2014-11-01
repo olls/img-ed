@@ -8,6 +8,9 @@ function $ (sel) {
   }
 }
 
+function on (e, obj, cb) {
+  return obj.addEventListener(e, cb, false);
+}
 
 var img_ed = {};
 
