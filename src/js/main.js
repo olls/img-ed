@@ -16,7 +16,14 @@ var img_ed = {};
 
 img_ed.defaults = {
   width: 300,
-  height: 150
+  height: 150,
+  font: '10px sans-serif',
+  samples: [
+    'images/coffee.jpg',
+    'images/tiger.jpg',
+    'images/wood.jpg',
+    'images/sticks.jpg'
+  ]
 };
 
 img_ed.controls = {
@@ -31,6 +38,13 @@ img_ed.controls = {
     name: 'Save',
     func: function (e) {
       console.log('Save');
+    }
+  },
+  text: {
+    name: 'Text',
+    func: function (e) {
+      console.log('Text');
+      
     }
   },
   pen: {
@@ -73,13 +87,6 @@ img_ed.load_controls = {
     }
   }
 };
-
-img_ed.samples = [
-  'images/coffee.jpg',
-  'images/tiger.jpg',
-  'images/wood.jpg',
-  'images/sticks.jpg'
-];
 
 img_ed.show = function (modal) {
   img_ed.lock = true;
@@ -138,7 +145,7 @@ img_ed.add_controls = function (elem, controls) {
 }
 
 img_ed.add_samples = function () {
-  this.samples.forEach(function (img_name) {
+  this.defaults.samples.forEach(function (img_name) {
     var img = new Image();
     img.src = img_name;
     img_ed.load_samples_e.appendChild(img);
@@ -176,7 +183,10 @@ img_ed.main = function () {
   if (!this.canvas.getContext) {
     return false;
   }
+
+  // Set up canvas
   this.ctx = this.canvas.getContext('2d');
+  this.ctx.font = this.defaults.font;
 
   // Add control buttons to DOM
   this.add_controls(this.edit_controls_e, this.controls);
@@ -189,7 +199,6 @@ img_ed.main = function () {
   on('modal_done', this.load_modal, function () {
     img_ed.hide(img_ed.load_modal);
   });
-
 }
 
 
