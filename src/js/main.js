@@ -62,18 +62,30 @@ img_ed.controls = {
         img_ed.canvas.classList.remove('crosshairs');
         
         // Get coords
-        var rect = img_ed.canvas.getBoundingClientRect();
-        var x = (e.clientX - rect.left) / (rect.right - rect.left) * img_ed.canvas.width;
-        var y = (e.clientY - rect.top) / (rect.bottom - rect.top) * img_ed.canvas.height;
+        var c = img_ed.canv_coords(e);
 
-        img_ed.ctx.fillText(prompt('Text:') || '', x, y);
+        img_ed.ctx.fillText(prompt('Text:') || '', c.x, c.y);
       });
     }
   },
   pen: {
     name: 'Pen',
-    func: function () {
+    func: function (e) {
       console.log('Pen');
+      var btn = e.target;
+      img_ed.tool = 'pen';
+      img_ed.canvas.classList.add('crosshairs');
+      on('click', document, (function (btn) {
+        return function (e) {
+          // Stop pen once click on something other than canvas or pen button
+          if (e.target != img_ed.canvas && e.target != btn) {
+            console.log('Stop pen');
+            img_ed.tool = undefined;
+            img_ed.canvas.classList.remove('crosshairs');
+            document.removeEventListener(e.type, arguments.callee);
+          }
+        };
+      })(btn));
     }
   },
   shape: {
@@ -118,6 +130,15 @@ img_ed.load_controls = {
   }
 };
 
+img_ed.pen = {
+  strokeStyle: 'black',
+  lineWidth: '1',
+  
+  last_x: 0,
+  last_y: 0,
+  down: false
+};
+
 img_ed.show = function (modal) {
   img_ed.lock = true;
   $('body').classList.add('lock');
@@ -138,6 +159,9 @@ img_ed.tooltip = function (text) {
   this.tooltip_e.classList.add('show');
   window.setTimeout(function () {
     img_ed.tooltip_e.classList.remove('show');
+    window.setTimeout(function () { // Wait for CSS transition to end
+      img_ed.tooltip_e.innerHTML = '';
+    }, 200);
   }, this.defaults.tooltip_time);
 }
 
@@ -208,6 +232,28 @@ img_ed.load_img = function (img_s) {
   img.src = img_s;
 }
 
+img_ed.pen.draw = function (x, y, down) {
+  if (down) {
+    img_ed.ctx.lineWidth = this.lineWidth;
+    img_ed.ctx.strokeStyle = this.strokeStyle;
+    img_ed.ctx.beginPath();
+    img_ed.ctx.lineJoin = "round";
+    img_ed.ctx.moveTo(this.last_x, this.last_y);
+    img_ed.ctx.lineTo(x, y);
+    img_ed.ctx.closePath();
+    img_ed.ctx.stroke();
+  }
+  this.last_x = x;
+  this.last_y = y;
+}
+
+img_ed.canv_coords = function (e) {
+  var rect = this.canvas.getBoundingClientRect();
+  var x = (e.clientX - rect.left) / (rect.right - rect.left) * this.canvas.width;
+  var y = (e.clientY - rect.top) / (rect.bottom - rect.top) * this.canvas.height;
+  return {x: x, y: y};
+}
+
 img_ed.setup = function () {
   this.ctx = this.canvas.getContext('2d');
   this.ctx.font = this.defaults.font;
@@ -217,6 +263,7 @@ img_ed.setup = function () {
 
 img_ed.main = function () {
   this.lock = false;
+  this.tool;
   this.modal_done = new Event('modal_done');
 
   this.canvas = $('#img');
@@ -244,6 +291,27 @@ img_ed.main = function () {
   // Add close modal event listener for the load modal
   on('modal_done', this.load_modal, function () {
     img_ed.hide(img_ed.load_modal);
+  });
+
+  // Drawing events
+  on('mousedown', this.canvas, function (e) {
+    if (img_ed.tool == 'pen') {
+      var c = img_ed.canv_coords(e);
+      img_ed.pen.down = true;
+      img_ed.pen.draw(c.x, c.y, false);
+    }
+  });
+  on('mousemove', this.canvas, function (e) {
+    if (img_ed.tool == 'pen' && img_ed.pen.down) {
+      var c = img_ed.canv_coords(e);
+      img_ed.pen.draw(c.x, c.y, true);
+    }
+  });
+  on('mouseup', this.canvas, function (e) {
+    img_ed.pen.down = false;
+  });
+  on('mouseleave', this.canvas, function (e) {
+    img_ed.pen.down = false;
   });
 }
 

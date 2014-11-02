@@ -43,11 +43,9 @@ h5 { font-size: 1em; }
   box-shadow: 0 0 20px 0 #10BDD4;
   -webkit-transition: .2s opacity ease;
   transition: .2s opacity ease;
-  height: 0;
   opacity: 0;
 }
 #tooltip.show {
-  height: auto;
   opacity: .8;
 }
 #tooltip.show:hover {
