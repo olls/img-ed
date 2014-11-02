@@ -205,7 +205,7 @@ img_ed.main = function () {
   // Add sample image buttons to load modal
   this.add_samples();
 
-  // Add close modal event listener
+  // Add close modal event listener for the load modal
   on('modal_done', this.load_modal, function () {
     img_ed.hide(img_ed.load_modal);
   });
