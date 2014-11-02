@@ -2,6 +2,7 @@ Todo:
 =====
 
 - browse
-- pen
+- font controls
+- pen controls
 - shape
 - extra!
