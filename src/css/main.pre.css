@@ -30,6 +30,24 @@ h4 { font-size: 1.5em; }
 h5 { font-size: 1em; }
 
 
+/* Modal Default Styles*/
+.modal {
+  color: #0c90a1;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  width: 70%;
+  border: 6px solid #10BDD4;
+  background-color: white;
+}
+.modal.off {
+  display: none;
+}
+
+
 /* Controls Default Styles */
 .controls {
   text-align: center;
@@ -50,24 +68,6 @@ body:not(.lock) .controls button:hover,
 .current .controls button:hover {
   cursor: pointer;
   background-color: #9ccdd4;
-}
-
-
-/* Modal Default Styles*/
-.modal {
-  color: #0c90a1;
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  -webkit-transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-  width: 70%;
-  border: 6px solid #10BDD4;
-  background-color: white;
-}
-.modal.off {
-  display: none;
 }
 
 
