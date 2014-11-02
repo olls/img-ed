@@ -28,7 +28,31 @@ h4 { font-size: 1.5em; }
 h5 { font-size: 1em; }
 
 
-/* Modal Default Styles*/
+/* Tooltip Styles */
+#tooltip {
+  position: fixed;
+  bottom: 2vw;
+  right: 2vw;
+  background-color: white;
+  color: black;
+  padding: .2em;
+  border: 2px solid #10BDD4;
+  border-radius: 2px;
+  box-shadow: 0 0 20px 0 #10BDD4;
+  transition: .2s opacity ease;
+  height: 0;
+  opacity: 0;
+}
+#tooltip.show {
+  height: auto;
+  opacity: .8;
+}
+#tooltip.show:hover {
+  opacity: 1;
+}
+
+
+/* Modal Default Styles */
 .modal {
   color: #0c90a1;
   position: fixed;
@@ -59,6 +83,7 @@ h5 { font-size: 1em; }
   margin: 0;
   padding: 1em 2em;
   background-color: transparent;
+  transition: .2s background-color ease;
 }
 body:not(.lock) .controls button:hover,
 .current .controls button:hover {

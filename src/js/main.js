@@ -18,6 +18,7 @@ img_ed.defaults = {
   width: 300,
   height: 150,
   font: '10px sans-serif',
+  tooltip_time: 5000,
   samples: [
     'images/coffee.jpg',
     'images/tiger.jpg',
@@ -44,7 +45,7 @@ img_ed.controls = {
     name: 'Text',
     func: function (e) {
       console.log('Text');
-      
+      img_ed.ctx.fillText(text, x, y);
     }
   },
   pen: {
@@ -101,6 +102,14 @@ img_ed.hide = function (modal) {
   $('body').classList.remove('lock');
   modal.classList.remove('current');
   modal.classList.add('off');
+}
+
+img_ed.tooltip = function (text) {
+  this.tooltip_e.innerHTML = text;
+  this.tooltip_e.classList.add('show');
+  window.setTimeout(function () {
+    img_ed.tooltip_e.classList.remove('show');
+  }, this.defaults.tooltip_time);
 }
 
 img_ed.add_controls = function (elem, controls) {
@@ -178,6 +187,7 @@ img_ed.main = function () {
   this.load_modal = $('#load');
   this.load_samples_e = $('#load .samples');
   this.load_controls_e = $('#load .controls');
+  this.tooltip_e = $('#tooltip');
 
   // Test for canvas support
   if (!this.canvas.getContext) {
