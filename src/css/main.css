@@ -99,11 +99,13 @@ body:not(.lock) .controls button:hover,
   margin: 20px auto;
   text-align: center;
 }
-
 #img {
   border: 6px solid #10BDD4;
   background-color: white;
   max-width: 100%;
+}
+#img.crosshairs {
+  cursor: crosshair;
 }
 
 

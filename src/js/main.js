@@ -12,12 +12,22 @@ function on (e, obj, cb) {
   return obj.addEventListener(e, cb, false);
 }
 
+function on_once (e, obj, cb) {
+  return obj.addEventListener(e, (function (cb) {
+    return function (e) {
+      e.target.removeEventListener(e.type, arguments.callee);
+      return cb(e);
+    };
+  })(cb), false);
+}
+
 var img_ed = {};
 
 img_ed.defaults = {
   width: 300,
   height: 150,
-  font: '10px sans-serif',
+  font: '30px sans-serif',
+  textAlign: 'center',
   tooltip_time: 5000,
   samples: [
     'images/coffee.jpg',
@@ -30,37 +40,49 @@ img_ed.defaults = {
 img_ed.controls = {
   load: {
     name: 'Load',
-    func: function (e) {
+    func: function () {
       console.log('Load');
       img_ed.show(img_ed.load_modal);
     }
   },
   save: {
     name: 'Save',
-    func: function (e) {
+    func: function () {
       console.log('Save');
     }
   },
   text: {
     name: 'Text',
-    func: function (e) {
+    func: function () {
       console.log('Text');
-      img_ed.ctx.fillText(text, x, y);
+      img_ed.tooltip('Click somewhere on the image to position text.');
+      img_ed.canvas.classList.add('crosshairs');
+      on_once('click', img_ed.canvas, function (e) {
+        img_ed.canvas.classList.remove('crosshairs');
+        img_ed.ctx.fillText(prompt('Text:') || '', e.offsetX, e.offsetY);
+      });
     }
   },
   pen: {
     name: 'Pen',
-    func: function (e) {
+    func: function () {
       console.log('Pen');
+    }
+  },
+  shape: {
+    name: 'Shape',
+    func: function () {
+      console.log('Shape');
     }
   },
   clear: {
     name: 'Clear',
-    func: function (e) {
+    func: function () {
       console.log('Clear')
       img_ed.ctx.clearRect(0, 0, img_ed.canvas.width, img_ed.canvas.height);
       img_ed.canvas.width = img_ed.defaults.width;
       img_ed.canvas.height = img_ed.defaults.height;
+      img_ed.setup();
     }
   }
 };
@@ -68,21 +90,21 @@ img_ed.controls = {
 img_ed.load_controls = {
   browse: {
     name: 'Browse...',
-    func: function (e) {
+    func: function () {
       console.log('Browse');
     }
   },
   url: {
     name: 'URL:',
     type: 'text',
-    func: function (e, elems) {
+    func: function (e, btn_elems) {
       console.log('URL');
-      img_ed.load_img(elems.text.value);
+      img_ed.load_img(btn_elems.text.value);
     }
   },
   exit: {
     name: 'Cancel',
-    func: function (e) {
+    func: function () {
       console.log('Cancel');
       img_ed.hide(img_ed.load_modal);
     }
@@ -174,8 +196,15 @@ img_ed.load_img = function (img_s) {
     t.canvas.width = img.width;
     t.canvas.height = img.height;
     t.ctx.drawImage(img, 0, 0, img.width, img.height);
+    t.setup();
   });
   img.src = img_s;
+}
+
+img_ed.setup = function () {
+  this.ctx = this.canvas.getContext('2d');
+  this.ctx.font = this.defaults.font;
+  this.ctx.textAlign = this.defaults.textAlign;
 }
 
 img_ed.main = function () {
@@ -195,8 +224,7 @@ img_ed.main = function () {
   }
 
   // Set up canvas
-  this.ctx = this.canvas.getContext('2d');
-  this.ctx.font = this.defaults.font;
+  this.setup();
 
   // Add control buttons to DOM
   this.add_controls(this.edit_controls_e, this.controls);
