@@ -18,7 +18,7 @@ img_ed.controls = {
   load: {
     name: 'Load',
     func: function (e) {
-      img_ed.load_img('http://localhost/projects/dvbris.com/build/images/logo.png');
+      img_ed.load_img('http://localhost/projects/dvbris.com/build/images/favicon.png');
       console.log('Load');
     }
   },
@@ -60,7 +60,9 @@ img_ed.load_img = function (img_s) {
   var t = this;
   var img = new Image();
   on('load', img, function (e) {
-    t.cxt.drawImage(img, 0, 0);
+    t.canvas.width = img.width;
+    t.canvas.height = img.height;
+    t.cxt.drawImage(img, 0, 0, img.width, img.height);
   });
   img.src = img_s;
 }
