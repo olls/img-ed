@@ -25,9 +25,6 @@ img_ed.controls = {
     func: function (e) {
       console.log('Load');
       img_ed.show(img_ed.load_modal);
-      on('modal_done', img_ed.load_modal, function () {
-        img_ed.hide(img_ed.load_modal);
-      });
     }
   },
   save: {
@@ -76,6 +73,13 @@ img_ed.load_controls = {
     }
   }
 };
+
+img_ed.samples = [
+  'images/coffee.jpg',
+  'images/tiger.jpg',
+  'images/wood.jpg',
+  'images/sticks.jpg'
+];
 
 img_ed.show = function (modal) {
   img_ed.lock = true;
@@ -130,7 +134,21 @@ img_ed.add_controls = function (elem, controls) {
     })(control, elems));
     
     elem.appendChild(elems.cont);
-  });  
+  });
+}
+
+img_ed.add_samples = function () {
+  this.samples.forEach(function (img_name) {
+    var img = new Image();
+    img.src = img_name;
+    img_ed.load_samples_e.appendChild(img);
+    on('click', img, (function (img_name) {
+      return function (e) {
+        img_ed.load_img(img_name);
+        img_ed.hide(img_ed.load_modal);
+      };
+    })(img_name));
+  });
 }
 
 img_ed.load_img = function (img_s) {
@@ -151,6 +169,7 @@ img_ed.main = function () {
   this.canvas = $('#img');
   this.edit_controls_e = $('#edit .controls');
   this.load_modal = $('#load');
+  this.load_samples_e = $('#load .samples');
   this.load_controls_e = $('#load .controls');
 
   // Test for canvas support
@@ -162,6 +181,14 @@ img_ed.main = function () {
   // Add control buttons to DOM
   this.add_controls(this.edit_controls_e, this.controls);
   this.add_controls(this.load_controls_e, this.load_controls);
+
+  // Add sample image buttons to load modal
+  this.add_samples();
+
+  // Add close modal event listener
+  on('modal_done', this.load_modal, function () {
+    img_ed.hide(img_ed.load_modal);
+  });
 
 }
 

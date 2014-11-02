@@ -83,15 +83,15 @@ body:not(.lock) .controls button:hover,
 
 
 /* Image Load Modal */
-#load .select {
+#load .samples {
   margin: 20px;
 }
-#load .select:after {
+#load .samples:after {
   content: '';
   display: block;
   clear: both;
 }
-#load .select img {
+#load .samples img {
   position: relative;
   width: 23%;
   margin: 0 1%;
@@ -99,7 +99,7 @@ body:not(.lock) .controls button:hover,
   display: block;
   float: left;
 }
-#load .select img:hover {
+#load .samples img:hover {
   border: 6px solid #0c90a1;
   cursor: pointer;
 }
