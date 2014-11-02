@@ -29,7 +29,7 @@ img_ed.defaults = {
   font: '30px sans-serif',
   textAlign: 'center',
   textBaseline: 'middle',
-  tooltip_time: 5000,
+  tooltip_time: 2000,
   samples: [
     'images/coffee.jpg',
     'images/tiger.jpg',
@@ -39,93 +39,134 @@ img_ed.defaults = {
 };
 
 img_ed.controls = {
+  main: {
+    settings: {
+      name: 'Settings',
+      func: function () {
+        console.log('Settings');
+        img_ed.show (img_ed.settings_modal);
+      }
+    },
+    load: {
+      name: 'Load',
+      func: function () {
+        console.log('Load');
+        img_ed.show(img_ed.load_modal);
+      }
+    },
+    save: {
+      name: 'Save',
+      func: function () {
+        console.log('Save');
+      }
+    },
+    text: {
+      name: 'Text',
+      func: function () {
+        console.log('Text');
+        img_ed.tooltip('Click somewhere on the image to position text.');
+        img_ed.canvas.classList.add('crosshairs');
+        on_once('click', img_ed.canvas, function (e) {
+          img_ed.canvas.classList.remove('crosshairs');
+          
+          // Get coords
+          var c = img_ed.canv_coords(e);
+
+          img_ed.ctx.fillText(prompt('Text:') || '', c.x, c.y);
+        });
+      }
+    },
+    pen: {
+      name: 'Pen',
+      func: function (e) {
+        console.log('Pen');
+        var btn = e.target;
+        img_ed.tool = 'pen';
+        img_ed.canvas.classList.add('crosshairs');
+        on('click', document, (function (btn) {
+          return function (e) {
+            // Stop pen once click on something other than canvas or pen button
+            if (e.target != img_ed.canvas && e.target != btn) {
+              console.log('Stop pen');
+              img_ed.tool = undefined;
+              img_ed.canvas.classList.remove('crosshairs');
+              document.removeEventListener(e.type, arguments.callee);
+            }
+          };
+        })(btn));
+      }
+    },
+    shape: {
+      name: 'Shape',
+      func: function () {
+        console.log('Shape');
+      }
+    },
+    clear: {
+      name: 'Clear',
+      func: function () {
+        console.log('Clear')
+        img_ed.ctx.clearRect(0, 0, img_ed.canvas.width, img_ed.canvas.height);
+        img_ed.canvas.width = img_ed.defaults.width;
+        img_ed.canvas.height = img_ed.defaults.height;
+        img_ed.setup();
+      }
+    }
+  },
+
   load: {
-    name: 'Load',
-    func: function () {
-      console.log('Load');
-      img_ed.show(img_ed.load_modal);
+    browse: {
+      name: 'Browse...',
+      func: function () {
+        console.log('Browse');
+      }
+    },
+    url: {
+      name: 'URL:',
+      type: 'text',
+      func: function (e, btn_elems) {
+        console.log('URL');
+        img_ed.load_img(btn_elems.text.value);
+      }
+    },
+    exit: {
+      name: 'Cancel',
+      func: function () {}
     }
   },
-  save: {
-    name: 'Save',
-    func: function () {
-      console.log('Save');
-    }
-  },
-  text: {
-    name: 'Text',
-    func: function () {
-      console.log('Text');
-      img_ed.tooltip('Click somewhere on the image to position text.');
-      img_ed.canvas.classList.add('crosshairs');
-      on_once('click', img_ed.canvas, function (e) {
-        img_ed.canvas.classList.remove('crosshairs');
-        
-        // Get coords
-        var c = img_ed.canv_coords(e);
 
-        img_ed.ctx.fillText(prompt('Text:') || '', c.x, c.y);
-      });
-    }
-  },
-  pen: {
-    name: 'Pen',
-    func: function (e) {
-      console.log('Pen');
-      var btn = e.target;
-      img_ed.tool = 'pen';
-      img_ed.canvas.classList.add('crosshairs');
-      on('click', document, (function (btn) {
-        return function (e) {
-          // Stop pen once click on something other than canvas or pen button
-          if (e.target != img_ed.canvas && e.target != btn) {
-            console.log('Stop pen');
-            img_ed.tool = undefined;
-            img_ed.canvas.classList.remove('crosshairs');
-            document.removeEventListener(e.type, arguments.callee);
-          }
-        };
-      })(btn));
-    }
-  },
-  shape: {
-    name: 'Shape',
-    func: function () {
-      console.log('Shape');
-    }
-  },
-  clear: {
-    name: 'Clear',
-    func: function () {
-      console.log('Clear')
-      img_ed.ctx.clearRect(0, 0, img_ed.canvas.width, img_ed.canvas.height);
-      img_ed.canvas.width = img_ed.defaults.width;
-      img_ed.canvas.height = img_ed.defaults.height;
-      img_ed.setup();
-    }
-  }
-};
-
-img_ed.load_controls = {
-  browse: {
-    name: 'Browse...',
-    func: function () {
-      console.log('Browse');
-    }
-  },
-  url: {
-    name: 'URL:',
-    type: 'text',
-    func: function (e, btn_elems) {
-      console.log('URL');
-      img_ed.load_img(btn_elems.text.value);
-    }
-  },
-  exit: {
-    name: 'Cancel',
-    func: function () {
-      console.log('Cancel');
-      img_ed.hide(img_ed.load_modal);
+  settings: {
+    pen_color: {
+      name: 'Pen Colour:',
+      type: 'text',
+      func: function () {
+        console.log('Pen colour');
+      }
+    },
+    pen_size: {
+      name: 'Pen Size:',
+      type: 'number',
+      func: function () {
+        console.log('Pen size');
+      }
+    },
+    text_size: {
+      name: 'Text Size:',
+      type: 'number',
+      func: function () {
+        console.log('Text size');
+      }
+    },
+    text_color: {
+      name: 'Text Colour:',
+      type: 'text',
+      func: function () {
+        console.log('Text colour');
+      }
+    },
+    exit: {
+      name: 'Exit',
+      func: function () {}
     }
   }
 };
@@ -178,9 +219,9 @@ img_ed.add_controls = function (elem, controls) {
     elems.btn = document.createElement('button');
     elems.cont.appendChild(elems.btn);
 
-    if (control.type == 'text') {
+    if (control.type) {
       elems.text = document.createElement('input');
-      elems.text.setAttribute('type', 'text');
+      elems.text.setAttribute('type', control.type);
       elems.cont.appendChild(elems.text);
     }
     
@@ -271,6 +312,8 @@ img_ed.main = function () {
   this.load_modal = $('#load');
   this.load_samples_e = $('#load .samples');
   this.load_controls_e = $('#load .controls');
+  this.settings_modal = $('#settings');
+  this.settings_controls_e = $('#settings .controls');
   this.tooltip_e = $('#tooltip');
 
   // Test for canvas support
@@ -282,15 +325,19 @@ img_ed.main = function () {
   this.setup();
 
   // Add control buttons to DOM
-  this.add_controls(this.edit_controls_e, this.controls);
-  this.add_controls(this.load_controls_e, this.load_controls);
+  this.add_controls(this.edit_controls_e, this.controls.main);
+  this.add_controls(this.load_controls_e, this.controls.load);
+  this.add_controls(this.settings_controls_e, this.controls.settings);
 
   // Add sample image buttons to load modal
   this.add_samples();
 
-  // Add close modal event listener for the load modal
+  // Add close modal event listener for the load and settings modals
   on('modal_done', this.load_modal, function () {
     img_ed.hide(img_ed.load_modal);
+  });
+  on('modal_done', this.settings_modal, function () {
+    img_ed.hide(img_ed.settings_modal);
   });
 
   // Drawing events
