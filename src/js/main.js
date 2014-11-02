@@ -28,6 +28,7 @@ img_ed.defaults = {
   height: 150,
   font: '30px sans-serif',
   textAlign: 'center',
+  textBaseline: 'middle',
   tooltip_time: 5000,
   samples: [
     'images/coffee.jpg',
@@ -59,7 +60,13 @@ img_ed.controls = {
       img_ed.canvas.classList.add('crosshairs');
       on_once('click', img_ed.canvas, function (e) {
         img_ed.canvas.classList.remove('crosshairs');
-        img_ed.ctx.fillText(prompt('Text:') || '', e.offsetX, e.offsetY);
+        
+        // Get coords
+        var rect = img_ed.canvas.getBoundingClientRect();
+        var x = (e.clientX - rect.left) / (rect.right - rect.left) * img_ed.canvas.width;
+        var y = (e.clientY - rect.top) / (rect.bottom - rect.top) * img_ed.canvas.height;
+
+        img_ed.ctx.fillText(prompt('Text:') || '', x, y);
       });
     }
   },
@@ -205,6 +212,7 @@ img_ed.setup = function () {
   this.ctx = this.canvas.getContext('2d');
   this.ctx.font = this.defaults.font;
   this.ctx.textAlign = this.defaults.textAlign;
+  this.ctx.textBaseline = this.defaults.textBaseline;
 }
 
 img_ed.main = function () {
