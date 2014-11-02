@@ -18,7 +18,7 @@ img_ed.controls = {
   load: {
     name: 'Load',
     func: function (e) {
-      img_ed.load_img('http://localhost/projects/dvbris.com/build/images/favicon.png');
+      img_ed.load_img('http://localhost/projects/dvbris.com/build/images/logo.png');
       console.log('Load');
     }
   },
@@ -69,7 +69,7 @@ img_ed.load_img = function (img_s) {
 
 img_ed.main = function () {
   this.canvas = $('#img');
-  this.controls_e = $('#controls');
+  this.controls_e = $('#edit .controls');
 
   // Test for canvas support
   if (!this.canvas.getContext) {
