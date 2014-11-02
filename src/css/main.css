@@ -1,5 +1,7 @@
 @import url(http://fonts.googleapis.com/css?family=Lato:300);
 
+
+/* General Styles */
 html {
   box-sizing: border-box;
 }
@@ -25,19 +27,8 @@ h3 { font-size: 2em; }
 h4 { font-size: 1.5em; }
 h5 { font-size: 1em; }
 
-#edit {
-  min-width: 60%;
-  max-width: 90%;
-  margin: 20px auto;
-  text-align: center;
-}
 
-#img {
-  border: 6px solid #10BDD4;
-  background-color: white;
-  max-width: 100%;
-}
-
+/* Controls Default Styles */
 .controls {
   text-align: center;
 }
@@ -53,6 +44,8 @@ h5 { font-size: 1em; }
   cursor: pointer;
 }
 
+
+/* Modal Default Styles*/
 .modal {
   color: #0c90a1;
   position: fixed;
@@ -62,4 +55,22 @@ h5 { font-size: 1em; }
   width: 70%;
   border: 6px solid #10BDD4;
   background-color: white;
+}
+.modal.off {
+  display: none;
+}
+
+
+/* Canvas Area Styles */
+#edit {
+  min-width: 60%;
+  max-width: 90%;
+  margin: 20px auto;
+  text-align: center;
+}
+
+#img {
+  border: 6px solid #10BDD4;
+  background-color: white;
+  max-width: 100%;
 }
