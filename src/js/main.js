@@ -246,7 +246,7 @@ img_ed.add_controls = function (elem, controls) {
         // Only run if not locked or the buttons modal is specificly unlocked.
         if (!img_ed.lock || (isin_modal && modal.classList.contains('current'))) {
           control.func(e, btn_elems);
-          modal.dispatchEvent(img_ed._modal_done);
+          modal.dispatchEvent(img_ed.modal_done);
         }
         e.preventDefault();
         return false;
@@ -316,7 +316,7 @@ img_ed.main = function () {
   this.lock = false;
   this.tool;
   this.unq_id = 0;
-  this._modal_done = new CustomEvent('_modal_done');
+  this.modal_done = new CustomEvent('modal_done');
 
   this.canvas = $('#img');
   this.edit_controls_e = $('#edit .controls');
@@ -344,10 +344,10 @@ img_ed.main = function () {
   this.add_samples();
 
   // Add close modal event listener for the load and settings modals
-  on('_modal_done', this.load_modal, function () {
+  on('modal_done', this.load_modal, function () {
     img_ed.hide(img_ed.load_modal);
   });
-  on('_modal_done', this.settings_modal, function () {
+  on('modal_done', this.settings_modal, function () {
     img_ed.hide(img_ed.settings_modal);
   });
 
