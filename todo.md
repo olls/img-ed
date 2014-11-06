@@ -8,3 +8,4 @@ Todo:
 - shape
 - extra!
 - fix type styling
+- fix IE images aspect ratio in load.
