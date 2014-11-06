@@ -9,3 +9,4 @@ Todo:
 - extra!
 - fix type styling
 - fix IE images aspect ratio in load.
+- get rid of polyfil
