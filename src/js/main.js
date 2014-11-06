@@ -316,7 +316,7 @@ img_ed.main = function () {
   this.lock = false;
   this.tool;
   this.unq_id = 0;
-  this._modal_done = new Event('_modal_done');
+  this._modal_done = new CustomEvent('_modal_done');
 
   this.canvas = $('#img');
   this.edit_controls_e = $('#edit .controls');
