@@ -159,7 +159,7 @@ img_ed.controls = {
     },
     text_color: {
       name: 'Text Colour:',
-      type: 'text',
+      type: 'color',
       func: function () {
         console.log('Text colour');
       }
@@ -211,39 +211,49 @@ img_ed.add_controls = function (elem, controls) {
     var control = controls[key];
     
     // Create Element(s)
-    var elems = {};
+    var btn_elems = {};
 
-    elems.cont = document.createElement('div');
-    elems.cont.classList.add('cont');
+    btn_elems.cont = document.createElement('div');
+    btn_elems.cont.classList.add('cont');
 
-    elems.btn = document.createElement('button');
-    elems.cont.appendChild(elems.btn);
+    btn_elems.btn = document.createElement('button');
+    btn_elems.btn.innerHTML = control.name;
+    btn_elems.cont.appendChild(btn_elems.btn);
 
     if (control.type) {
-      elems.text = document.createElement('input');
-      elems.text.setAttribute('type', control.type);
-      elems.cont.appendChild(elems.text);
+      var id = img_ed.unq_id++;
+      
+      btn_elems.label = document.createElement('label');
+      btn_elems.label.innerHTML = control.name;
+      btn_elems.label.setAttribute('for', control.type + '_input_' + id);
+      btn_elems.cont.appendChild(btn_elems.label);
+
+      btn_elems.text = document.createElement('input');
+      btn_elems.text.setAttribute('type', control.type);
+      btn_elems.text.setAttribute('id', control.type + '_input_' + id);
+      btn_elems.cont.appendChild(btn_elems.text);
+      
+      // Move button to end
+      btn_elems.btn.innerHTML = 'Go';
+      btn_elems.cont.appendChild(btn_elems.btn);
     }
-    
-    // Add Name
-    elems.btn.innerHTML = control.name;
 
     // Add Function
-    on('click', elems.btn, (function (control, elems) {
+    on('click', btn_elems.btn, (function (control, btn_elems) {
       return function (e) {
-        var modal = elems.cont.parentNode.parentNode;
+        var modal = btn_elems.cont.parentNode.parentNode;
         var isin_modal = modal.classList.contains('modal');
         // Only run if not locked or the buttons modal is specificly unlocked.
         if (!img_ed.lock || (isin_modal && modal.classList.contains('current'))) {
-          control.func(e, elems);
+          control.func(e, btn_elems);
           modal.dispatchEvent(img_ed.modal_done);
         }
         e.preventDefault();
         return false;
       };
-    })(control, elems));
+    })(control, btn_elems));
     
-    elem.appendChild(elems.cont);
+    elem.appendChild(btn_elems.cont);
   });
 }
 
@@ -305,6 +315,7 @@ img_ed.setup = function () {
 img_ed.main = function () {
   this.lock = false;
   this.tool;
+  this.unq_id = 0;
   this.modal_done = new Event('modal_done');
 
   this.canvas = $('#img');

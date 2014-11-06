@@ -76,6 +76,9 @@ h5 { font-size: 1em; }
   background-color: white;
   border: 6px solid #10BDD4;
 }
+.controls label {
+  padding: 0 1em;
+}
 .controls button {
   border: 0;
   margin: 0;
