@@ -1,3 +1,17 @@
+// CustomEvent Polyfill from [https://developer.mozilla.org/en/docs/Web/API/CustomEvent#Polyfill]
+(function () {
+  function CustomEvent ( event, params ) {
+    params = params || { bubbles: false, cancelable: false, detail: undefined };
+    var evt = document.createEvent( 'CustomEvent' );
+    evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );
+    return evt;
+   };
+
+  CustomEvent.prototype = window.Event.prototype;
+
+  window.CustomEvent = CustomEvent;
+})();
+
 // Utitlies
 function $ (sel) {
   var e = document.querySelectorAll(sel);
