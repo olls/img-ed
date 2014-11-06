@@ -140,7 +140,7 @@ img_ed.controls = {
       type: 'text',
       func: function (e, btn_elems) {
         console.log('URL');
-        img_ed.load_img(btn_elems.text.value);
+        img_ed.load_img(btn_elems.input.value);
       }
     },
     exit: {
@@ -160,15 +160,17 @@ img_ed.controls = {
     pen_size: {
       name: 'Pen Size:',
       type: 'number',
-      func: function () {
+      func: function (e, btn_elems) {
         console.log('Pen size');
+        img_ed.pen.lineWidth = btn_elems.input.value;
       }
     },
     text_size: {
       name: 'Text Size:',
       type: 'number',
-      func: function () {
+      func: function (e, btn_elems) {
         console.log('Text size');
+        img_ed.ctx.font = btn_elems.input.value + 'px ' + img_ed.ctx.font.split(' ')[1];
       }
     },
     text_color: {
@@ -242,10 +244,10 @@ img_ed.add_controls = function (elem, controls) {
       btn_elems.label.setAttribute('for', control.type + '_input_' + id);
       btn_elems.cont.appendChild(btn_elems.label);
 
-      btn_elems.text = document.createElement('input');
-      btn_elems.text.setAttribute('type', control.type);
-      btn_elems.text.setAttribute('id', control.type + '_input_' + id);
-      btn_elems.cont.appendChild(btn_elems.text);
+      btn_elems.input = document.createElement('input');
+      btn_elems.input.setAttribute('type', control.type);
+      btn_elems.input.setAttribute('id', control.type + '_input_' + id);
+      btn_elems.cont.appendChild(btn_elems.input);
       
       // Move button to end
       btn_elems.btn.innerHTML = 'Go';
@@ -320,6 +322,7 @@ img_ed.canv_coords = function (e) {
 }
 
 img_ed.setup = function () {
+  console.log('Reset');
   this.ctx = this.canvas.getContext('2d');
   this.ctx.font = this.defaults.font;
   this.ctx.textAlign = this.defaults.textAlign;
