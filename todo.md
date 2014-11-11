@@ -11,3 +11,4 @@ Todo:
 - fix IE images aspect ratio in load.
 - get rid of polyfil
 - default values in settings
+- prompt default IE

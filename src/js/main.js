@@ -41,6 +41,7 @@ img_ed.defaults = {
   width: 300,
   height: 150,
   font: '30px sans-serif',
+  fillStyle: 'black',
   textAlign: 'center',
   textBaseline: 'middle',
   tooltip_time: 2000,
@@ -53,136 +54,120 @@ img_ed.defaults = {
 };
 
 img_ed.controls = {
-  main: {
-    settings: {
-      name: 'Settings',
-      func: function () {
-        console.log('Settings');
-        img_ed.show (img_ed.settings_modal);
-      }
-    },
-    load: {
-      name: 'Load',
-      func: function () {
-        console.log('Load');
-        img_ed.show(img_ed.load_modal);
-      }
-    },
-    save: {
-      name: 'Save',
-      func: function () {
-        console.log('Save');
-      }
-    },
-    text: {
-      name: 'Text',
-      func: function () {
-        console.log('Text');
-        img_ed.tooltip('Click somewhere on the image to position text.');
-        img_ed.canvas.classList.add('crosshairs');
-        on_once('click', img_ed.canvas, function (e) {
-          img_ed.canvas.classList.remove('crosshairs');
-
-          // Get coords
-          var c = img_ed.canv_coords(e);
-
-          img_ed.ctx.fillText(prompt('Text:') || '', c.x, c.y);
-        });
-      }
-    },
-    pen: {
-      name: 'Pen',
-      func: function (e) {
-        console.log('Pen');
-        var btn = e.target;
-        img_ed.tool = 'pen';
-        img_ed.canvas.classList.add('crosshairs');
-        on('click', document, (function (btn) {
-          return function (e) {
-            // Stop pen once click on something other than canvas or pen button
-            if (e.target != img_ed.canvas && e.target != btn) {
-              console.log('Stop pen');
-              img_ed.tool = undefined;
-              img_ed.canvas.classList.remove('crosshairs');
-              document.removeEventListener(e.type, arguments.callee);
-            }
-          };
-        })(btn));
-      }
-    },
-    shape: {
-      name: 'Shape',
-      func: function () {
-        console.log('Shape');
-      }
-    },
-    clear: {
-      name: 'Clear',
-      func: function () {
-        console.log('Clear')
-        img_ed.ctx.clearRect(0, 0, img_ed.canvas.width, img_ed.canvas.height);
-        img_ed.canvas.width = img_ed.defaults.width;
-        img_ed.canvas.height = img_ed.defaults.height;
-        img_ed.setup();
-      }
-    }
-  },
-
-  load: {
-    browse: {
-      name: 'Browse...',
-      func: function () {
-        console.log('Browse');
-      }
-    },
-    url: {
-      name: 'URL:',
-      type: 'text',
-      func: function (e, btn_elems) {
-        console.log('URL');
-        img_ed.load_img(btn_elems.input.value);
-      }
-    },
-    exit: {
-      name: 'Cancel',
-      func: function () {}
-    }
-  },
-
+  top: true,
   settings: {
-    pen_color: {
-      name: 'Pen Colour:',
-      type: 'text',
-      func: function () {
-        console.log('Pen colour');
+    name: 'Settings',
+    job: 'modal',
+    modal: {
+      pen_color: {
+        name: 'Pen Colour:',
+        job: 'input',
+        type: 'color',
+        setter: function (value) {
+          img_ed.pen.strokeStyle = value;
+        }
+      },
+      pen_size: {
+        name: 'Pen Size:',
+        job: 'input',
+        type: 'number',
+        setter: function (value) {
+          img_ed.pen.lineWidth = value;
+        }
+      },
+      text_size: {
+        name: 'Text Size:',
+        job: 'input',
+        type: 'number',
+        setter: function (value) {
+          img_ed.ctx.font = img_ed.set_font(value + 'px', 'size');
+        }
+      },
+      text_color: {
+        name: 'Text Colour:',
+        job: 'input',
+        type: 'color',
+        setter: function (value) {
+          img_ed.ctx.fillColor = value;
+        }
       }
-    },
-    pen_size: {
-      name: 'Pen Size:',
-      type: 'number',
-      func: function (e, btn_elems) {
-        console.log('Pen size');
-        img_ed.pen.lineWidth = btn_elems.input.value;
+    }
+  },
+  load: {
+    name: 'Load',
+    job: 'modal',
+    modal: {
+      url: {
+        name: 'URL:',
+        job: 'input',
+        type: 'text',
+        func: function (e, btn_elems) {
+          console.log('URL');
+          img_ed.load_img(btn_elems.input.value);
+        }
       }
-    },
-    text_size: {
-      name: 'Text Size:',
-      type: 'number',
-      func: function (e, btn_elems) {
-        console.log('Text size');
-        img_ed.ctx.font = btn_elems.input.value + 'px ' + img_ed.ctx.font.split(' ')[1];
-      }
-    },
-    text_color: {
-      name: 'Text Colour:',
-      type: 'color',
-      func: function () {
-        console.log('Text colour');
-      }
-    },
-    exit: {
-      name: 'Exit',
-      func: function () {}
+    }
+  },
+  save: {
+    name: 'Save',
+    job: 'func',
+    func: function () {
+      console.log('Save');
+    }
+  },
+  text: {
+    name: 'Text',
+    job: 'func',
+    func: function (e) {
+      console.log('Text');
+      img_ed.tooltip('Click somewhere on the image to position text.');
+      img_ed.canvas.classList.add('crosshairs');
+      on_once('click', img_ed.canvas, function (e) {
+        img_ed.canvas.classList.remove('crosshairs');
+
+        // Get coords
+        var c = img_ed.canv_coords(e);
+        img_ed.ctx.fillText(prompt('Text:') || '', c.x, c.y);
+      });
+    }
+  },
+  pen: {
+    name: 'Pen',
+    job: 'func',
+    func: function (e) {
+      console.log('Pen');
+      var btn = e.target;
+      img_ed.tool = 'pen';
+      img_ed.canvas.classList.add('crosshairs');
+      on('click', document, (function (btn) {
+        return function (e) {
+          // Stop pen once click on something other than canvas or pen button
+          if (e.target != img_ed.canvas && e.target != btn) {
+            console.log('Stop pen');
+            img_ed.tool = undefined;
+            img_ed.canvas.classList.remove('crosshairs');
+            document.removeEventListener(e.type, arguments.callee);
+          }
+        };
+      })(btn));
+    }
+  },
+  shape: {
+    name: 'Shape',
+    job: 'func',
+    func: function (e) {
+      console.log('Shape');
+    }
+  },
+  clear: {
+    name: 'Clear',
+    job: 'func',
+    func: function (e) {
+      console.log('Clear')
+      img_ed.ctx.clearRect(0, 0, img_ed.canvas.width, img_ed.canvas.height);
+      img_ed.canvas.width = img_ed.defaults.width;
+      img_ed.canvas.height = img_ed.defaults.height;
+      img_ed.setup();
     }
   }
 };
@@ -223,22 +208,65 @@ img_ed.tooltip = function (text) {
 }
 
 img_ed.add_controls = function (elem, controls) {
+  
+  // This is just to identify the top layer.
+  if (controls.top) {
+    var top = true;
+  } else {
+    var top = false;
+  }
+
   Object.keys(controls).forEach(function (key) {
+    if (key == 'top') {
+      return;
+    }
     var control = controls[key];
 
-    // Create Element(s)
     var btn_elems = {};
-
     btn_elems.cont = document.createElement('div');
     btn_elems.cont.classList.add('cont');
 
-    btn_elems.btn = document.createElement('button');
-    btn_elems.btn.innerHTML = control.name;
-    btn_elems.cont.appendChild(btn_elems.btn);
+    function add_btn () {
+      btn_elems.btn = document.createElement('button');
+      btn_elems.btn.innerHTML = control.name;
+      btn_elems.cont.appendChild(btn_elems.btn);
+    }
 
-    if (control.type) {
+    if (control.job == 'func') {
+      add_btn();
+      on('click', btn_elems.btn, function (top, btn_elems) {
+        return function (e) {
+          if (!(top && img_ed.lock)) {
+            control.func(e, btn_elems);
+          }
+          e.preventDefault();
+          return false;
+        };
+      }(top, btn_elems));
+
+    } else if (control.job == 'modal') {
+      var modal_e = document.getElementById(key);
+      add_btn();
+      on('click', btn_elems.btn, function () {
+        if (!img_ed.lock) {
+          img_ed.show(modal_e);
+        }
+      });
+
+      control.modal.exit = {
+        name: 'Exit',
+        job: 'func',
+        func: (function (modal_e) {
+          return function () {
+            img_ed.hide(modal_e)
+          };
+        })(modal_e)
+      }
+      img_ed.add_controls(modal_e.getElementsByClassName('controls')[0], control.modal);
+
+    } else if (control.job == 'input') {
       var id = img_ed.unq_id++;
-
+      
       btn_elems.label = document.createElement('label');
       btn_elems.label.innerHTML = control.name;
       btn_elems.label.setAttribute('for', control.type + '_input_' + id);
@@ -247,27 +275,8 @@ img_ed.add_controls = function (elem, controls) {
       btn_elems.input = document.createElement('input');
       btn_elems.input.setAttribute('type', control.type);
       btn_elems.input.setAttribute('id', control.type + '_input_' + id);
-      btn_elems.cont.appendChild(btn_elems.input);
-      
-      // Move button to end
-      btn_elems.btn.innerHTML = 'Go';
-      btn_elems.cont.appendChild(btn_elems.btn);
+      btn_elems.cont.appendChild(btn_elems.input);      
     }
-
-    // Add Function
-    on('click', btn_elems.btn, (function (control, btn_elems) {
-      return function (e) {
-        var modal = btn_elems.cont.parentNode.parentNode;
-        var isin_modal = modal.classList.contains('modal');
-        // Only run if not locked or the buttons modal is specificly unlocked.
-        if (!img_ed.lock || (isin_modal && modal.classList.contains('current'))) {
-          control.func(e, btn_elems);
-          modal.dispatchEvent(img_ed.modal_done);
-        }
-        e.preventDefault();
-        return false;
-      };
-    })(control, btn_elems));
 
     elem.appendChild(btn_elems.cont);
   });
@@ -321,6 +330,28 @@ img_ed.canv_coords = function (e) {
   return {x: x, y: y};
 }
 
+// Font string managment:
+// Assume font is in the form: `[size] [family]`
+img_ed.set_font = function (value, type) {
+  var size = this.get_size();
+  var family = this.get_family();
+
+  if (type == 'size') {
+    size = value;
+  } else if (type == 'family') {
+    family = value;
+  }
+
+  this.ctx.font = size + ' ' + family;
+}
+
+img_ed.get_size = function () {
+  return this.ctx.font.split(' ')[0];
+}
+img_ed.get_family = function () {
+  return this.ctx.font.split(' ')[1];
+}
+
 img_ed.setup = function () {
   console.log('Reset');
   this.ctx = this.canvas.getContext('2d');
@@ -354,9 +385,7 @@ img_ed.main = function () {
   this.setup();
 
   // Add control buttons to DOM
-  this.add_controls(this.edit_controls_e, this.controls.main);
-  this.add_controls(this.load_controls_e, this.controls.load);
-  this.add_controls(this.settings_controls_e, this.controls.settings);
+  this.add_controls(this.edit_controls_e, this.controls);
 
   // Add sample image buttons to load modal
   this.add_samples();
