@@ -82,7 +82,7 @@ img_ed.controls = {
         img_ed.canvas.classList.add('crosshairs');
         on_once('click', img_ed.canvas, function (e) {
           img_ed.canvas.classList.remove('crosshairs');
-          
+
           // Get coords
           var c = img_ed.canv_coords(e);
 
@@ -188,7 +188,7 @@ img_ed.controls = {
 img_ed.pen = {
   strokeStyle: 'black',
   lineWidth: '1',
-  
+
   last_x: 0,
   last_y: 0,
   down: false
@@ -223,7 +223,7 @@ img_ed.tooltip = function (text) {
 img_ed.add_controls = function (elem, controls) {
   Object.keys(controls).forEach(function (key) {
     var control = controls[key];
-    
+
     // Create Element(s)
     var btn_elems = {};
 
@@ -236,7 +236,7 @@ img_ed.add_controls = function (elem, controls) {
 
     if (control.type) {
       var id = img_ed.unq_id++;
-      
+
       btn_elems.label = document.createElement('label');
       btn_elems.label.innerHTML = control.name;
       btn_elems.label.setAttribute('for', control.type + '_input_' + id);
@@ -246,7 +246,7 @@ img_ed.add_controls = function (elem, controls) {
       btn_elems.text.setAttribute('type', control.type);
       btn_elems.text.setAttribute('id', control.type + '_input_' + id);
       btn_elems.cont.appendChild(btn_elems.text);
-      
+
       // Move button to end
       btn_elems.btn.innerHTML = 'Go';
       btn_elems.cont.appendChild(btn_elems.btn);
@@ -266,7 +266,7 @@ img_ed.add_controls = function (elem, controls) {
         return false;
       };
     })(control, btn_elems));
-    
+
     elem.appendChild(btn_elems.cont);
   });
 }
