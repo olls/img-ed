@@ -121,10 +121,10 @@ img_ed.controls = {
         job: 'input',
         type: 'color',
         save: function (value) {
-          img_ed.ctx.fillColor = value;
+          img_ed.ctx.fillStyle = value;
         },
         load: function () {
-          return img_ed.ctx.fillColor;
+          return img_ed.ctx.fillStyle;
         }
       }
     }
