@@ -79,10 +79,16 @@ h5 { font-size: 1em; }
 .controls label {
   padding: 0 1em;
 }
+.controls label,
+.controls button,
+.controls input,
+.controls select {
+  height: 3em;
+}
 .controls button {
   border: 0;
   margin: 0;
-  padding: 1em 2em;
+  padding: 0 1em;
   background-color: transparent;
   transition: .2s background-color ease;
 }
