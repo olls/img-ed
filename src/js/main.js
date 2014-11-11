@@ -262,7 +262,7 @@ img_ed.add_controls = function (elem, controls) {
         if (!img_ed.lock) {
           Object.keys(control.modal).forEach(function (key) {
             var m_control = control.modal[key];
-            if (m_control.job == 'input') {
+            if (m_control.job == 'input' && m_control.load) {
               m_control.elem.value = m_control.load();
             }
           });
