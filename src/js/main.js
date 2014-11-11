@@ -192,32 +192,6 @@ img_ed.pen = {
   down: false
 };
 
-img_ed.show = function (modal) {
-  img_ed.lock = true;
-  $('body').classList.add('lock');
-  modal.classList.add('current');
-  modal.classList.remove('off');
-}
-
-img_ed.hide = function (modal) {
-  console.log('Hide')
-  img_ed.lock = false;
-  $('body').classList.remove('lock');
-  modal.classList.remove('current');
-  modal.classList.add('off');
-}
-
-img_ed.tooltip = function (text) {
-  this.tooltip_e.innerHTML = text;
-  this.tooltip_e.classList.add('show');
-  window.setTimeout(function () {
-    img_ed.tooltip_e.classList.remove('show');
-    window.setTimeout(function () { // Wait for CSS transition to end
-      img_ed.tooltip_e.innerHTML = '';
-    }, 200);
-  }, this.defaults.tooltip_time);
-}
-
 img_ed.add_controls = function (elem, controls) {
 
   // This is just to identify the top layer.
@@ -349,6 +323,32 @@ img_ed.pen.draw = function (x, y, down) {
   }
   this.last_x = x;
   this.last_y = y;
+}
+
+img_ed.show = function (modal) {
+  img_ed.lock = true;
+  $('body').classList.add('lock');
+  modal.classList.add('current');
+  modal.classList.remove('off');
+}
+
+img_ed.hide = function (modal) {
+  console.log('Hide')
+  img_ed.lock = false;
+  $('body').classList.remove('lock');
+  modal.classList.remove('current');
+  modal.classList.add('off');
+}
+
+img_ed.tooltip = function (text) {
+  this.tooltip_e.innerHTML = text;
+  this.tooltip_e.classList.add('show');
+  window.setTimeout(function () {
+    img_ed.tooltip_e.classList.remove('show');
+    window.setTimeout(function () { // Wait for CSS transition to end
+      img_ed.tooltip_e.innerHTML = '';
+    }, 200);
+  }, this.defaults.tooltip_time);
 }
 
 img_ed.canv_coords = function (e) {
