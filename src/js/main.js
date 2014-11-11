@@ -58,14 +58,14 @@ img_ed.controls = {
       name: 'Settings',
       func: function () {
         console.log('Settings');
-        img_ed.show (img_ed.settings_modal);
+        img_ed.show (img_ed.settings_model);
       }
     },
     load: {
       name: 'Load',
       func: function () {
         console.log('Load');
-        img_ed.show(img_ed.load_modal);
+        img_ed.show(img_ed.load_model);
       }
     },
     save: {
@@ -196,19 +196,19 @@ img_ed.pen = {
   down: false
 };
 
-img_ed.show = function (modal) {
+img_ed.show = function (model) {
   img_ed.lock = true;
   $('body').classList.add('lock');
-  modal.classList.add('current');
-  modal.classList.remove('off');
+  model.classList.add('current');
+  model.classList.remove('off');
 }
 
-img_ed.hide = function (modal) {
+img_ed.hide = function (model) {
   console.log('Hide')
   img_ed.lock = false;
   $('body').classList.remove('lock');
-  modal.classList.remove('current');
-  modal.classList.add('off');
+  model.classList.remove('current');
+  model.classList.add('off');
 }
 
 img_ed.tooltip = function (text) {
@@ -262,7 +262,7 @@ img_ed.add_controls = function (elem, controls) {
         // Only run if not locked or the buttons modal is specificly unlocked.
         if (!img_ed.lock || (isin_modal && modal.classList.contains('current'))) {
           control.func(e, btn_elems);
-          modal.dispatchEvent(img_ed.modal_done);
+          model.dispatchEvent(img_ed.model_done);
         }
         e.preventDefault();
         return false;
@@ -281,7 +281,7 @@ img_ed.add_samples = function () {
     on('click', img, (function (img_name) {
       return function (e) {
         img_ed.load_img(img_name);
-        img_ed.hide(img_ed.load_modal);
+        img_ed.hide(img_ed.load_model);
       };
     })(img_name));
   });
@@ -333,14 +333,15 @@ img_ed.main = function () {
   this.lock = false;
   this.tool;
   this.unq_id = 0;
-  this.modal_done = new CustomEvent('modal_done');
+  this.model_open = new CustomEvent('model_open');
+  this.model_done = new CustomEvent('model_done');
 
   this.canvas = $('#img');
   this.edit_controls_e = $('#edit .controls');
-  this.load_modal = $('#load');
+  this.load_model = $('#load');
   this.load_samples_e = $('#load .samples');
   this.load_controls_e = $('#load .controls');
-  this.settings_modal = $('#settings');
+  this.settings_model = $('#settings');
   this.settings_controls_e = $('#settings .controls');
   this.tooltip_e = $('#tooltip');
 
@@ -357,15 +358,15 @@ img_ed.main = function () {
   this.add_controls(this.load_controls_e, this.controls.load);
   this.add_controls(this.settings_controls_e, this.controls.settings);
 
-  // Add sample image buttons to load modal
+  // Add sample image buttons to load model
   this.add_samples();
 
-  // Add close modal event listener for the load and settings modals
-  on('modal_done', this.load_modal, function () {
-    img_ed.hide(img_ed.load_modal);
+  // Add close model event listener for the load and settings models
+  on('model_done', this.load_model, function () {
+    img_ed.hide(img_ed.load_model);
   });
-  on('modal_done', this.settings_modal, function () {
-    img_ed.hide(img_ed.settings_modal);
+  on('model_done', this.settings_model, function () {
+    img_ed.hide(img_ed.settings_model);
   });
 
   // Drawing events

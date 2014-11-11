@@ -51,7 +51,7 @@ h5 { font-size: 1em; }
 
 
 /* Modal Default Styles */
-.modal {
+.model {
   color: #0c90a1;
   position: fixed;
   left: 50%;
@@ -61,7 +61,7 @@ h5 { font-size: 1em; }
   border: 6px solid #10BDD4;
   background-color: white;
 }
-.modal.off {
+.model.off {
   display: none;
 }
 
