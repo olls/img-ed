@@ -74,6 +74,9 @@ img_ed.controls = {
         name: 'Pen Size:',
         job: 'input',
         type: 'number',
+        attrs: {
+          min: 1
+        },
         save: function (value) {
           img_ed.pen.lineWidth = value;
         },
@@ -97,6 +100,10 @@ img_ed.controls = {
         name: 'Text Size:',
         job: 'input',
         type: 'number',
+        attrs: {
+          min: 1,
+          step: 4
+        },
         save: function (value) {
           img_ed.ctx.font = img_ed.set_font(value + 'px', 'size');
         },
@@ -312,6 +319,13 @@ img_ed.add_controls = function (elem, controls) {
         btn_elems.input = document.createElement('input');
         btn_elems.input.setAttribute('type', control.type);
         btn_elems.input.setAttribute('id', control.type + '_input_' + id);
+
+        if (control.attrs) {
+          Object.keys(control.attrs).forEach(function (attr) {
+            btn_elems.input.setAttribute(attr, control.attrs[attr]);
+          });
+        }
+
         btn_elems.cont.appendChild(btn_elems.input);
       }
 
