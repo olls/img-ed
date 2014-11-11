@@ -63,32 +63,44 @@ img_ed.controls = {
         name: 'Pen Colour:',
         job: 'input',
         type: 'color',
-        setter: function (value) {
+        save: function (value) {
           img_ed.pen.strokeStyle = value;
+        },
+        load: function () {
+          return img_ed.pen.strokeStyle;
         }
       },
       pen_size: {
         name: 'Pen Size:',
         job: 'input',
         type: 'number',
-        setter: function (value) {
+        save: function (value) {
           img_ed.pen.lineWidth = value;
+        },
+        load: function () {
+          return img_ed.pen.lineWidth;
         }
       },
       text_size: {
         name: 'Text Size:',
         job: 'input',
         type: 'number',
-        setter: function (value) {
+        save: function (value) {
           img_ed.ctx.font = img_ed.set_font(value + 'px', 'size');
+        },
+        load: function () {
+          return parseInt(img_ed.get_size(), 10);
         }
       },
       text_color: {
         name: 'Text Colour:',
         job: 'input',
         type: 'color',
-        setter: function (value) {
+        save: function (value) {
           img_ed.ctx.fillColor = value;
+        },
+        load: function () {
+          return img_ed.ctx.fillColor;
         }
       }
     }
@@ -101,9 +113,8 @@ img_ed.controls = {
         name: 'URL:',
         job: 'input',
         type: 'text',
-        func: function (e, btn_elems) {
-          console.log('URL');
-          img_ed.load_img(btn_elems.input.value);
+        save: function (value) {
+          img_ed.load_img(value);
         }
       }
     }
@@ -208,7 +219,7 @@ img_ed.tooltip = function (text) {
 }
 
 img_ed.add_controls = function (elem, controls) {
-  
+
   // This is just to identify the top layer.
   if (controls.top) {
     var top = true;
@@ -247,26 +258,41 @@ img_ed.add_controls = function (elem, controls) {
     } else if (control.job == 'modal') {
       var modal_e = document.getElementById(key);
       add_btn();
+
+      // Open
       on('click', btn_elems.btn, function () {
         if (!img_ed.lock) {
+          Object.keys(control.modal).forEach(function (key) {
+            var m_control = control.modal[key];
+            if (m_control.job == 'input') {
+              m_control.elem.value = m_control.load();
+            }
+          });
           img_ed.show(modal_e);
         }
       });
 
+      // Close
       control.modal.exit = {
         name: 'Exit',
         job: 'func',
-        func: (function (modal_e) {
+        func: (function (modal, modal_e) {
           return function () {
-            img_ed.hide(modal_e)
+            img_ed.hide(modal_e);
+            Object.keys(modal).forEach(function (key) {
+              var m_control = modal[key];
+              if (m_control.job == 'input') {
+                m_control.save(m_control.elem.value);
+              }
+            });
           };
-        })(modal_e)
+        })(control.modal, modal_e)
       }
       img_ed.add_controls(modal_e.getElementsByClassName('controls')[0], control.modal);
 
     } else if (control.job == 'input') {
       var id = img_ed.unq_id++;
-      
+
       btn_elems.label = document.createElement('label');
       btn_elems.label.innerHTML = control.name;
       btn_elems.label.setAttribute('for', control.type + '_input_' + id);
@@ -275,7 +301,9 @@ img_ed.add_controls = function (elem, controls) {
       btn_elems.input = document.createElement('input');
       btn_elems.input.setAttribute('type', control.type);
       btn_elems.input.setAttribute('id', control.type + '_input_' + id);
-      btn_elems.cont.appendChild(btn_elems.input);      
+      btn_elems.cont.appendChild(btn_elems.input);
+
+      control.elem = btn_elems.input;
     }
 
     elem.appendChild(btn_elems.cont);
