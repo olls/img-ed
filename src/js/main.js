@@ -85,6 +85,7 @@ img_ed.controls = {
         name: 'Text Style:',
         job: 'input',
         type: 'option',
+        options: ['normal', 'bold', 'italic'],
         save: function (value) {
           img_ed.ctx.font = img_ed.set_font(value, 'style');
         },
@@ -106,7 +107,8 @@ img_ed.controls = {
       text_family: {
         name: 'Text Font:',
         job: 'input',
-        type: 'text',
+        type: 'option',
+        options: ['serif', 'sans-serif', 'monospace', 'arial', 'times-new-roman'],
         save: function (value) {
           img_ed.ctx.font = img_ed.set_font(value, 'family');
         },
@@ -294,10 +296,24 @@ img_ed.add_controls = function (elem, controls) {
       btn_elems.label.setAttribute('for', control.type + '_input_' + id);
       btn_elems.cont.appendChild(btn_elems.label);
 
-      btn_elems.input = document.createElement('input');
-      btn_elems.input.setAttribute('type', control.type);
-      btn_elems.input.setAttribute('id', control.type + '_input_' + id);
-      btn_elems.cont.appendChild(btn_elems.input);
+      if (control.type == 'option') {
+        btn_elems.input = document.createElement('select');
+        btn_elems.input.setAttribute('id', control.type + '_input_' + id);
+        btn_elems.cont.appendChild(btn_elems.input);
+        
+        control.options.forEach(function (option) {
+          var option_e = document.createElement('option');
+          option_e.value = option;
+          option_e.innerHTML = option;
+          btn_elems.input.appendChild(option_e);
+        });
+
+      } else {
+        btn_elems.input = document.createElement('input');
+        btn_elems.input.setAttribute('type', control.type);
+        btn_elems.input.setAttribute('id', control.type + '_input_' + id);
+        btn_elems.cont.appendChild(btn_elems.input);
+      }
 
       control.elem = btn_elems.input;
     }
@@ -394,6 +410,9 @@ img_ed.set_font = function (value, type) {
   } else if (type == 'size') {
     size = value;
   }
+
+  // _font used because the browser messes with the font property
+  //  so we can't be sure what comes out in the getters.
   this.ctx._font = style + ' ' + size + ' ' + family;
   this.ctx.font = this.ctx._font;
 }
