@@ -40,7 +40,7 @@ var img_ed = {};
 img_ed.defaults = {
   width: 300,
   height: 150,
-  font: '30px sans-serif',
+  font: 'normal 32px sans-serif',
   fillStyle: 'black',
   textAlign: 'center',
   textBaseline: 'middle',
@@ -81,6 +81,17 @@ img_ed.controls = {
           return img_ed.pen.lineWidth;
         }
       },
+      text_style: {
+        name: 'Text Style:',
+        job: 'input',
+        type: 'option',
+        save: function (value) {
+          img_ed.ctx.font = img_ed.set_font(value, 'style');
+        },
+        load: function () {
+          return img_ed.get_style();
+        }
+      },
       text_size: {
         name: 'Text Size:',
         job: 'input',
@@ -90,6 +101,17 @@ img_ed.controls = {
         },
         load: function () {
           return parseInt(img_ed.get_size(), 10);
+        }
+      },
+      text_family: {
+        name: 'Text Font:',
+        job: 'input',
+        type: 'text',
+        save: function (value) {
+          img_ed.ctx.font = img_ed.set_font(value, 'family');
+        },
+        load: function () {
+          return img_ed.get_family();
         }
       },
       text_color: {
@@ -359,30 +381,36 @@ img_ed.canv_coords = function (e) {
 }
 
 // Font string managment:
-// Assume font is in the form: `[size] [family]`
+// Assume font is in the form: `[style] [size] [family]`
 img_ed.set_font = function (value, type) {
+  var style = this.get_style();
   var size = this.get_size();
   var family = this.get_family();
 
-  if (type == 'size') {
-    size = value;
+  if (type == 'style') {
+    style = value;
   } else if (type == 'family') {
     family = value;
+  } else if (type == 'size') {
+    size = value;
   }
-
-  this.ctx.font = size + ' ' + family;
+  this.ctx._font = style + ' ' + size + ' ' + family;
+  this.ctx.font = this.ctx._font;
 }
-
+img_ed.get_style = function () {
+  return this.ctx._font.split(' ')[0];
+}
 img_ed.get_size = function () {
-  return this.ctx.font.split(' ')[0];
+  return this.ctx._font.split(' ')[1];
 }
 img_ed.get_family = function () {
-  return this.ctx.font.split(' ')[1];
+  return this.ctx._font.split(' ')[2];
 }
 
 img_ed.setup = function () {
   console.log('Reset');
   this.ctx = this.canvas.getContext('2d');
+  this.ctx._font = this.defaults.font;
   this.ctx.font = this.defaults.font;
   this.ctx.textAlign = this.defaults.textAlign;
   this.ctx.textBaseline = this.defaults.textBaseline;
