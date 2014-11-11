@@ -108,7 +108,7 @@ img_ed.controls = {
         name: 'Text Font:',
         job: 'input',
         type: 'option',
-        options: ['serif', 'sans-serif', 'monospace', 'arial', 'times-new-roman'],
+        options: ['serif', 'sans-serif', 'monospace', 'arial', 'times-new-roman', 'verdana'],
         save: function (value) {
           img_ed.ctx.font = img_ed.set_font(value, 'family');
         },
