@@ -188,9 +188,9 @@ img_ed.controls = {
   },
   shape: {
     name: 'Shape',
-    job: 'func',
-    func: function (e) {
-      console.log('Shape');
+    job: 'modal',
+    modal: {
+      
     }
   },
   clear: {
