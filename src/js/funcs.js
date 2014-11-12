@@ -172,7 +172,6 @@ var img_ed = (function () {
     self.last_y = 0;
     self.down = false;
 
-
     // Called from a mousemove event, continues the pen line.
     self.draw = function (x, y, down) {
       if (down) {
