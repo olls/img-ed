@@ -42,9 +42,13 @@ img_ed.defaults = {
   height: 150,
   font: 'normal 32px sans-serif',
   fillStyle: 'black',
+  strokeStyle: 'black',
   textAlign: 'center',
   textBaseline: 'middle',
   tooltip_time: 2000,
+  colors: ['black',   'yellow', 'cyan',   'green',
+           'red',     'blue',   'purple', 'pink',
+           'orange',  'grey',   'white',  'brown'],
   samples: [
     'images/coffee.jpg',
     'images/tiger.jpg',
@@ -62,7 +66,8 @@ img_ed.controls = {
       pen_color: {
         name: 'Pen Colour:',
         job: 'input',
-        type: 'color',
+        type: 'option',
+        options: img_ed.defaults.colors,
         save: function (value) {
           img_ed.pen.strokeStyle = value;
         },
@@ -126,7 +131,8 @@ img_ed.controls = {
       text_color: {
         name: 'Text Colour:',
         job: 'input',
-        type: 'color',
+        type: 'option',
+        options: img_ed.defaults.colors,
         save: function (value) {
           img_ed.ctx.fillStyle = value;
         },
@@ -446,6 +452,8 @@ img_ed.setup = function () {
   this.ctx._font = this.defaults.font;
   this.ctx.font = this.defaults.font;
   this.ctx.textAlign = this.defaults.textAlign;
+  this.ctx.fillStyle = this.defaults.fillStyle;
+  this.ctx.strokeStyle = this.defaults.strokeStyle;
   this.ctx.textBaseline = this.defaults.textBaseline;
 }
 
