@@ -155,6 +155,10 @@ img_ed.controls = {
     job: 'func',
     func: function () {
       console.log('Save');
+      var a = document.createElement('a');
+      a.setAttribute('href', img_ed.canvas.toDataURL("image/png").replace("image/png", "image/octet-stream"));
+      a.setAttribute('download', 'img.png');
+      a.click();
     }
   },
   text: {
