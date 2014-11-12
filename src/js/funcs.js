@@ -162,6 +162,7 @@ var img_ed = (function () {
   }
 
 
+  // Sub-module
   self.pen = (function (parent) {
     var self = {};
 
