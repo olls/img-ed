@@ -1,17 +1,3 @@
-// CustomEvent Polyfill from [https://developer.mozilla.org/en/docs/Web/API/CustomEvent#Polyfill]
-(function () {
-  function CustomEvent ( event, params ) {
-    params = params || { bubbles: false, cancelable: false, detail: undefined };
-    var evt = document.createEvent( 'CustomEvent' );
-    evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );
-    return evt;
-   };
-
-  CustomEvent.prototype = window.Event.prototype;
-
-  window.CustomEvent = CustomEvent;
-})();
-
 // Utitlies
 function $ (sel) {
   var e = document.querySelectorAll(sel);
@@ -461,8 +447,6 @@ img_ed.main = function () {
   this.lock = false;
   this.tool;
   this.unq_id = 0;
-  this.modal_open = new CustomEvent('modal_open');
-  this.modal_done = new CustomEvent('modal_done');
 
   this.canvas = $('#img');
   this.edit_controls_e = $('#edit .controls');
@@ -486,14 +470,6 @@ img_ed.main = function () {
 
   // Add sample image buttons to load modal
   this.add_samples();
-
-  // Add close modal event listener for the load and settings modals
-  on('modal_done', this.load_modal, function () {
-    img_ed.hide(img_ed.load_modal);
-  });
-  on('modal_done', this.settings_modal, function () {
-    img_ed.hide(img_ed.settings_modal);
-  });
 
   // Drawing events
   on('mousedown', this.canvas, function (e) {
