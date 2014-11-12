@@ -32,6 +32,7 @@ var img_ed = (function (self) {
     self.add_drawing_evts();
   }
 
+
   return self;
 }(img_ed));
 
