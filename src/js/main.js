@@ -276,6 +276,7 @@ img_ed.add_controls = function (elem, controls) {
         func: (function (modal, modal_e) {
           return function () {
             img_ed.hide(modal_e);
+            // Save all the values defined in the modal
             Object.keys(modal).forEach(function (key) {
               var m_control = modal[key];
               if (m_control.job == 'input') {
