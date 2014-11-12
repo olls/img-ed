@@ -382,7 +382,7 @@ img_ed.add_extras = function () {
   add_imgs(this.defaults.shapes, img_ed.shape_shapes_e, function (img_name) {
     return function (e) {
       // Load the image into the canvas and close the modal.
-      img_ed.load_img(img_name);
+      img_ed.load_shape(img_name);
       img_ed.hide(img_ed.shape_modal);
     };
   });
@@ -395,8 +395,22 @@ img_ed.load_img = function (img_s) {
     img_ed.canvas.width = img.width;
     img_ed.canvas.height = img.height;
     img_ed.ctx.drawImage(img, 0, 0, img.width, img.height);
-    img_ed.setup();
   });
+  img.src = img_s;
+}
+
+img_ed.load_shape = function (img_s) {
+  var img = new Image();
+  on('load', img, (function (img) {
+    return function (e) {
+      var ratio = img.height / img.width;
+      var width = img_ed.canvas.width / 2;
+      var height = width * ratio;
+      var x = (img_ed.canvas.width - width) / 2;
+      var y = (img_ed.canvas.height - height) / 2;
+      img_ed.ctx.drawImage(img, x, y, width, height);
+    };
+  })(img));
   img.src = img_s;
 }
 
