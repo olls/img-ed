@@ -117,15 +117,18 @@ body:not(.lock) .controls button:hover,
 
 
 /* Image Load Modal */
-#load .samples {
+#load .samples,
+#shape .shapes {
   margin: 20px;
 }
-#load .samples:after {
+#load .samples:after,
+#shape .shapes:after {
   content: '';
   display: block;
   clear: both;
 }
-#load .samples img {
+#load .samples img,
+#shape .shapes img {
   position: relative;
   width: 23%;
   margin: 0 1%;
@@ -133,7 +136,8 @@ body:not(.lock) .controls button:hover,
   display: block;
   float: left;
 }
-#load .samples img:hover {
+#load .samples img:hover,
+#shape .shapes img:hover {
   border: 6px solid #0c90a1;
   cursor: pointer;
 }

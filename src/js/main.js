@@ -40,6 +40,11 @@ img_ed.defaults = {
     'images/tiger.jpg',
     'images/wood.jpg',
     'images/sticks.jpg'
+  ],
+  shapes: [
+    'images/speech.png',
+    'images/circle.png',
+    'images/rect.jpg',
   ]
 };
 
@@ -355,28 +360,42 @@ img_ed.add_controls = function (elem, controls) {
   });
 }
 
-img_ed.add_samples = function () {
-  this.defaults.samples.forEach(function (img_name) {
-    var img = new Image();
-    img.src = img_name;
-    img_ed.load_samples_e.appendChild(img);
-    on('click', img, (function (img_name) {
-      return function (e) {
-        img_ed.load_img(img_name);
-        img_ed.hide(img_ed.load_modal);
-      };
-    })(img_name));
+img_ed.add_extras = function () {
+
+  function add_imgs (img_names, elem, func_gen) {
+    img_names.forEach(function (img_name) {
+      var img = new Image();
+      img.src = img_name;
+      elem.appendChild(img);
+      on('click', img, func_gen(img_name));
+    });
+  }
+
+  add_imgs(this.defaults.samples, img_ed.load_samples_e, function (img_name) {
+    return function (e) {
+      // Load the image into the canvas and close the modal.
+      img_ed.load_img(img_name);
+      img_ed.hide(img_ed.load_modal);
+    };
   });
+
+  add_imgs(this.defaults.shapes, img_ed.shape_shapes_e, function (img_name) {
+    return function (e) {
+      // Load the image into the canvas and close the modal.
+      img_ed.load_img(img_name);
+      img_ed.hide(img_ed.shape_modal);
+    };
+  });
+
 }
 
 img_ed.load_img = function (img_s) {
-  var t = this;
   var img = new Image();
   on('load', img, function (e) {
-    t.canvas.width = img.width;
-    t.canvas.height = img.height;
-    t.ctx.drawImage(img, 0, 0, img.width, img.height);
-    t.setup();
+    img_ed.canvas.width = img.width;
+    img_ed.canvas.height = img.height;
+    img_ed.ctx.drawImage(img, 0, 0, img.width, img.height);
+    img_ed.setup();
   });
   img.src = img_s;
 }
@@ -490,14 +509,17 @@ img_ed.main = function () {
   // Add control buttons to DOM
   this.add_controls(this.edit_controls_e, this.controls);
 
+  // Get elements
   this.load_modal = $('#load');
   this.load_samples_e = $('#load .samples');
   this.load_controls_e = $('#load .controls');
+  this.shape_modal = $('#shape');
+  this.shape_shapes_e = $('#shape .shapes');
   this.settings_modal = $('#settings');
   this.settings_controls_e = $('#settings .controls');
 
-  // Add sample image buttons to load modal
-  this.add_samples();
+  // Add sample image buttons to load modal and shapes to shapes modal.
+  this.add_extras();
 
   // Drawing events
   on('mousedown', this.canvas, function (e) {
