@@ -381,9 +381,22 @@ img_ed.add_extras = function () {
 
   add_imgs(this.defaults.shapes, img_ed.shape_shapes_e, function (img_name) {
     return function (e) {
-      // Load the image into the canvas and close the modal.
-      img_ed.load_shape(img_name);
+      // Close the modal.
       img_ed.hide(img_ed.shape_modal);
+
+      // Get position from user
+      img_ed.tooltip('Click somewhere on the image to position shape.');
+      img_ed.canvas.classList.add('crosshairs');
+      on_once('click', img_ed.canvas, (function (img_name) {
+        return function (e) {
+          img_ed.canvas.classList.remove('crosshairs');
+
+          // Get coords
+          var c = img_ed.canv_coords(e);
+          // Load the image into the canvas
+          img_ed.load_shape(img_name, c.x, c.y);
+        };
+      })(img_name));
     };
   });
 
@@ -399,18 +412,18 @@ img_ed.load_img = function (img_s) {
   img.src = img_s;
 }
 
-img_ed.load_shape = function (img_s) {
+img_ed.load_shape = function (img_s, x, y) {
   var img = new Image();
-  on('load', img, (function (img) {
+  on('load', img, (function (img, x, y) {
     return function (e) {
       var ratio = img.height / img.width;
       var width = img_ed.canvas.width / 2;
       var height = width * ratio;
-      var x = (img_ed.canvas.width - width) / 2;
-      var y = (img_ed.canvas.height - height) / 2;
+      x = x - (width / 2);
+      y = y - (height / 2);
       img_ed.ctx.drawImage(img, x, y, width, height);
     };
-  })(img));
+  })(img, x, y));
   img.src = img_s;
 }
 
