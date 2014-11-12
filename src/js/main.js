@@ -48,6 +48,7 @@ img_ed.controls = {
   settings: {
     name: 'Settings',
     job: 'modal',
+    title: 'Settings',
     modal: {
       pen_color: {
         name: 'Pen Colour:',
@@ -131,6 +132,8 @@ img_ed.controls = {
   load: {
     name: 'Load',
     job: 'modal',
+    title: 'Load Image',
+    extra: 'samples',
     modal: {
       url: {
         name: 'URL:',
@@ -189,9 +192,9 @@ img_ed.controls = {
   shape: {
     name: 'Shape',
     job: 'modal',
-    modal: {
-      
-    }
+    title: 'Add Shape',
+    extra: 'shapes',
+    modal: {}
   },
   clear: {
     name: 'Clear',
@@ -253,10 +256,33 @@ img_ed.add_controls = function (elem, controls) {
       }(top, btn_elems));
 
     } else if (control.job == 'modal') {
-      var modal_e = document.getElementById(key);
       add_btn();
 
-      // Open
+      // Create and add the modal element to the body
+      var modal_e = document.createElement('div');
+      modal_e.id = key;
+      modal_e.classList.add('modal', 'off');
+      // Title
+      var title_e = document.createElement('h2');
+      title_e.innerHTML = control.title;
+      modal_e.appendChild(title_e);
+      // Extra
+      if (control.extra) {
+        var extra_e = document.createElement('div');
+        extra_e.classList.add(control.extra);
+        modal_e.appendChild(extra_e);
+      }
+      // Controls
+      var controls_e = document.createElement('div');
+      controls_e.classList.add('controls');
+      modal_e.appendChild(controls_e);
+
+      document.body.appendChild(modal_e);
+      
+      // Add the inputs to it
+      img_ed.add_controls(controls_e, control.modal);
+
+      // On open, load the value for every input
       on('click', btn_elems.btn, function () {
         if (!img_ed.lock) {
           Object.keys(control.modal).forEach(function (key) {
@@ -269,7 +295,7 @@ img_ed.add_controls = function (elem, controls) {
         }
       });
 
-      // Close
+      // On close, save the value for every input
       control.modal.exit = {
         name: 'Exit',
         job: 'func',
@@ -286,7 +312,6 @@ img_ed.add_controls = function (elem, controls) {
           };
         })(control.modal, modal_e)
       }
-      img_ed.add_controls(modal_e.getElementsByClassName('controls')[0], control.modal);
 
     } else if (control.job == 'input') {
       var id = img_ed.unq_id++;
@@ -451,11 +476,6 @@ img_ed.main = function () {
 
   this.canvas = $('#img');
   this.edit_controls_e = $('#edit .controls');
-  this.load_modal = $('#load');
-  this.load_samples_e = $('#load .samples');
-  this.load_controls_e = $('#load .controls');
-  this.settings_modal = $('#settings');
-  this.settings_controls_e = $('#settings .controls');
   this.tooltip_e = $('#tooltip');
 
   // Test for canvas support
@@ -468,6 +488,12 @@ img_ed.main = function () {
 
   // Add control buttons to DOM
   this.add_controls(this.edit_controls_e, this.controls);
+  
+  this.load_modal = $('#load');
+  this.load_samples_e = $('#load .samples');
+  this.load_controls_e = $('#load .controls');
+  this.settings_modal = $('#settings');
+  this.settings_controls_e = $('#settings .controls');
 
   // Add sample image buttons to load modal
   this.add_samples();
