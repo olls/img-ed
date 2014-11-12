@@ -42,16 +42,6 @@ var img_ed = (function () {
   };
 
 
-  self.pen = {
-    strokeStyle: 'black',
-    lineWidth: '1',
-
-    last_x: 0,
-    last_y: 0,
-    down: false
-  };
-
-
   // Setup Funcs
   // ===========
 
@@ -172,21 +162,35 @@ var img_ed = (function () {
   }
 
 
-  // Called from a mousemove event, continues the pen line.
-  self.pen.draw = function (x, y, down) {
-    if (down) {
-      self.ctx.lineWidth = self.lineWidth;
-      self.ctx.strokeStyle = self.strokeStyle;
-      self.ctx.beginPath();
-      self.ctx.lineJoin = "round";
-      self.ctx.moveTo(self.last_x, self.last_y);
-      self.ctx.lineTo(x, y);
-      self.ctx.closePath();
-      self.ctx.stroke();
+  self.pen = (function (parent) {
+    var self = {};
+
+    self.strokeStyle = 'black';
+    self.lineWidth = '1';
+
+    self.last_x = 0;
+    self.last_y = 0;
+    self.down = false;
+
+
+    // Called from a mousemove event, continues the pen line.
+    self.draw = function (x, y, down) {
+      if (down) {
+        parent.ctx.lineWidth = self.lineWidth;
+        parent.ctx.strokeStyle = self.strokeStyle;
+        parent.ctx.beginPath();
+        parent.ctx.lineJoin = "round";
+        parent.ctx.moveTo(self.last_x, self.last_y);
+        parent.ctx.lineTo(x, y);
+        parent.ctx.closePath();
+        parent.ctx.stroke();
+      }
+      self.last_x = x;
+      self.last_y = y;
     }
-    self.last_x = x;
-    self.last_y = y;
-  }
+    
+    return self;
+  }(self));
 
 
   // Displays a tooltip of text.
