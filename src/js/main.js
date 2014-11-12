@@ -203,7 +203,16 @@ img_ed.controls = {
     job: 'modal',
     title: 'Add Shape',
     extra: 'shapes',
-    modal: {}
+    modal: {
+      url: {
+        name: 'URL:',
+        job: 'input',
+        type: 'text',
+        save: function (value) {
+          img_ed.add_shape(value);
+        }
+      }
+    }
   },
   clear: {
     name: 'Clear',
@@ -388,22 +397,26 @@ img_ed.add_extras = function () {
       // Close the modal.
       img_ed.hide(img_ed.shape_modal);
 
-      // Get position from user
-      img_ed.tooltip('Click somewhere on the image to position shape.');
-      img_ed.canvas.classList.add('crosshairs');
-      on_once('click', img_ed.canvas, (function (img_name) {
-        return function (e) {
-          img_ed.canvas.classList.remove('crosshairs');
-
-          // Get coords
-          var c = img_ed.canv_coords(e);
-          // Load the image into the canvas
-          img_ed.load_shape(img_name, c.x, c.y);
-        };
-      })(img_name));
+      img_ed.add_shape(img_name);
     };
   });
 
+}
+
+img_ed.add_shape = function (img_name) {
+  // Get position from user
+  img_ed.tooltip('Click somewhere on the image to position shape.');
+  img_ed.canvas.classList.add('crosshairs');
+  on_once('click', img_ed.canvas, (function (img_name) {
+    return function (e) {
+      img_ed.canvas.classList.remove('crosshairs');
+
+      // Get coords
+      var c = img_ed.canv_coords(e);
+      // Load the image into the canvas
+      img_ed.load_shape(img_name, c.x, c.y);
+    };
+  })(img_name));
 }
 
 img_ed.load_img = function (img_s) {
