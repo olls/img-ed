@@ -274,7 +274,6 @@ img_ed.add_controls = function (elem, controls) {
       }(top, btn_elems));
 
     } else if (control.job == 'modal') {
-      add_btn();
 
       // Create and add the modal element to the body
       var modal_e = document.createElement('div');
@@ -298,6 +297,7 @@ img_ed.add_controls = function (elem, controls) {
       document.body.appendChild(modal_e);
 
       // On open, load the value for every input
+      add_btn();
       on('click', btn_elems.btn, function () {
         if (!img_ed.lock) {
           Object.keys(control.modal).forEach(function (key) {
