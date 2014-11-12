@@ -7,5 +7,4 @@ Todo:
 - extra!
 - fix button vertical positioning
 - fix IE images aspect ratio in load.
-- get rid of polyfil
 - prompt default IE
