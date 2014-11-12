@@ -6,6 +6,7 @@ var controls = (function () {
 
   self.lock = false;
 
+
   self.init = function (elem, controls_def) {
 
     // This is just to identify the top layer.
@@ -143,6 +144,7 @@ var controls = (function () {
     });
   }
 
+
   self.show = function (modal) {
     self.lock = true;
     $('body').classList.add('lock');
@@ -150,6 +152,7 @@ var controls = (function () {
     modal.classList.remove('off');
   }
 
+  
   self.hide = function (modal) {
     console.log('Hide')
     self.lock = false;
@@ -157,6 +160,7 @@ var controls = (function () {
     modal.classList.remove('current');
     modal.classList.add('off');
   }
+
 
   return self;
 }());
