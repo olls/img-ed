@@ -278,9 +278,6 @@ img_ed.add_controls = function (elem, controls) {
       modal_e.appendChild(controls_e);
 
       document.body.appendChild(modal_e);
-      
-      // Add the inputs to it
-      img_ed.add_controls(controls_e, control.modal);
 
       // On open, load the value for every input
       on('click', btn_elems.btn, function () {
@@ -295,11 +292,12 @@ img_ed.add_controls = function (elem, controls) {
         }
       });
 
-      // On close, save the value for every input
+      // Add exit button
       control.modal.exit = {
         name: 'Exit',
         job: 'func',
         func: (function (modal, modal_e) {
+          // On close, save the value for every input
           return function () {
             img_ed.hide(modal_e);
             // Save all the values defined in the modal
@@ -312,6 +310,9 @@ img_ed.add_controls = function (elem, controls) {
           };
         })(control.modal, modal_e)
       }
+      
+      // Add the inputs to it
+      img_ed.add_controls(controls_e, control.modal);
 
     } else if (control.job == 'input') {
       var id = img_ed.unq_id++;
@@ -488,7 +489,7 @@ img_ed.main = function () {
 
   // Add control buttons to DOM
   this.add_controls(this.edit_controls_e, this.controls);
-  
+
   this.load_modal = $('#load');
   this.load_samples_e = $('#load .samples');
   this.load_controls_e = $('#load .controls');
