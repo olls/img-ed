@@ -7,3 +7,4 @@ Todo:
 - fix IE images aspect ratio in load.
 - prompt default IE
 - move shapes (preview position)
+- split into sections
