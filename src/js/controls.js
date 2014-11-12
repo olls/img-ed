@@ -49,7 +49,8 @@ var controls = (function () {
         // Create and add the modal element to the body
         var modal_e = document.createElement('div');
         modal_e.id = key;
-        modal_e.classList.add('modal', 'off');
+        modal_e.classList.add('modal');
+        modal_e.classList.add('off');
         // Title
         var title_e = document.createElement('h2');
         title_e.innerHTML = control.title;
