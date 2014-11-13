@@ -1,0 +1,8 @@
+{
+    "hosts": {
+        "oliverfaircliff": {
+            "output": "/var/www/img-ed",
+            "url": "http://img-ed.oliverfaircliff.com"
+        }
+    }
+}
