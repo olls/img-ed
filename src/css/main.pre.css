@@ -137,6 +137,7 @@ body:not(.lock) .controls button:hover,
 #shape .shapes img {
   position: relative;
   width: 23%;
+  height: auto;
   margin: 0 1%;
   border: 6px solid #10BDD4;
   display: block;
