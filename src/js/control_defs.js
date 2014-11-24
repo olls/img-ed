@@ -157,16 +157,7 @@ var control_defs = {
     job: 'modal',
     title: 'Add Shape',
     extra: 'shapes',
-    modal: {
-      url: {
-        name: 'URL:',
-        job: 'input',
-        type: 'text',
-        save: function (value) {
-          img_ed.add_shape(value);
-        }
-      }
-    }
+    modal: {}
   },
   clear: {
     name: 'Clear',

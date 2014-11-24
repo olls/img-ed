@@ -116,7 +116,7 @@ body:not(.lock) .controls button:hover,
 }
 
 
-/* Image Load Modal */
+/* Modal */
 #load .samples,
 #shape .shapes {
   margin: 20px;
