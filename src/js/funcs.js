@@ -43,7 +43,8 @@ var img_ed = (function () {
       'images/border-1',
       'images/border-2',
       'images/border-3',
-      'images/border-4'
+      'images/border-4',
+      'images/border-5'
     ]
   };
 
