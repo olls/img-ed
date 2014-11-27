@@ -38,6 +38,12 @@ var img_ed = (function () {
       'images/speech.png',
       'images/circle.png',
       'images/rect.jpg',
+    ],
+    borders: [
+      'images/border-1',
+      'images/border-2',
+      'images/border-3',
+      'images/border-4'
     ]
   };
 
@@ -45,7 +51,7 @@ var img_ed = (function () {
   // Setup Funcs
   // ===========
 
-  // This is for extra stuff not supported by 
+  // This is for extra stuff not supported by
   //  the controls setup, like image buttons.
   self.add_extras = function () {
 
@@ -58,6 +64,7 @@ var img_ed = (function () {
       });
     }
 
+    // Load Modal
     add_imgs(self.defaults.samples, self.load_samples_e, function (img_name) {
       return function (e) {
         // Load the image into the canvas and close the modal.
@@ -66,6 +73,7 @@ var img_ed = (function () {
       };
     });
 
+    // Shapes Modal
     add_imgs(self.defaults.shapes, self.shape_shapes_e, function (img_name) {
       return function (e) {
         // Close the modal.
@@ -73,6 +81,20 @@ var img_ed = (function () {
 
         self.add_shape(img_name);
       };
+    });
+
+    // Borders Modal
+    self.defaults.borders.forEach(function (border_path) {
+      var border = document.createElement('div');
+      border.classList.add('border-sample');
+      border.style.backgroundImage = 'url(' + border_path + '/border.png)';
+      self.border_borders_e.appendChild(border);
+      on('click', border, function () {
+        // Close the modal.
+        controls.hide(self.border_modal);
+
+        self.add_border(border_path);
+      });
     });
   }
 
@@ -92,11 +114,11 @@ var img_ed = (function () {
         self.pen.draw(c.x, c.y, true);
       }
     });
-    
+
     on('mouseup', self.canvas, function (e) {
       self.pen.down = false;
     });
-    
+
     on('mouseleave', self.canvas, function (e) {
       self.pen.down = false;
     });
@@ -129,7 +151,7 @@ var img_ed = (function () {
 
         // Get coords
         var c = self.canv_coords(e);
-        
+
         // Load the image into the canvas
         var img = new Image();
         on('load', img, (function (img, x, y) {
@@ -179,7 +201,7 @@ var img_ed = (function () {
         parent.ctx.lineWidth = self.lineWidth;
         parent.ctx.strokeStyle = self.strokeStyle;
         parent.ctx.beginPath();
-        parent.ctx.lineJoin = "round";
+        parent.ctx.lineJoin = 'round';
         parent.ctx.moveTo(self.last_x, self.last_y);
         parent.ctx.lineTo(x, y);
         parent.ctx.closePath();
@@ -188,9 +210,39 @@ var img_ed = (function () {
       self.last_x = x;
       self.last_y = y;
     }
-    
+
     return self;
   }(self));
+
+
+  // Adds a border to the image.
+  self.add_border = function (border_path) {
+
+    // Load the image into the canvas
+    var border = new Image();
+    var corner = new Image();
+
+    on('load', corner, function () {
+      add_img(self.ctx, corner, 0, 0, 50, 50, 0);
+      add_img(self.ctx, corner, self.canvas.width, 0, 50, 50, Math.PI/2);
+      add_img(self.ctx, corner, self.canvas.width, self.canvas.height, 50, 50, Math.PI);
+      add_img(self.ctx, corner, 0, self.canvas.height, 50, 50, -Math.PI/2);
+    });
+
+    on('load', border, function () {
+      // Top
+      add_img(self.ctx, border, 50, 0, self.canvas.width-100, 50, 0);
+      // Right
+      add_img(self.ctx, border, self.canvas.width, 50, self.canvas.height-100, 50, Math.PI/2);
+      // Bottom
+      add_img(self.ctx, border, self.canvas.width-50, self.canvas.height, self.canvas.width-100, 50, Math.PI);
+      // Left
+      add_img(self.ctx, border, 0, self.canvas.height-50, self.canvas.height-100, 50, -Math.PI/2);
+    });
+
+    border.src = border_path + '/border.png';
+    corner.src = border_path + '/corner.png';
+  }
 
 
   // Displays a tooltip of text.

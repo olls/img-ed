@@ -59,6 +59,7 @@ var controls = (function () {
         if (control.extra) {
           var extra_e = document.createElement('div');
           extra_e.classList.add(control.extra);
+          extra_e.classList.add('modal_extra');
           modal_e.appendChild(extra_e);
         }
         // Controls
@@ -100,7 +101,7 @@ var controls = (function () {
             };
           })(control.modal, modal_e)
         }
-        
+
         // Add the inputs to it
         self.init(controls_e, control.modal);
 
@@ -116,7 +117,7 @@ var controls = (function () {
           btn_elems.input = document.createElement('select');
           btn_elems.input.setAttribute('id', control.type + '_input_' + id);
           btn_elems.cont.appendChild(btn_elems.input);
-          
+
           control.options.forEach(function (option) {
             var option_e = document.createElement('option');
             option_e.value = option;
@@ -153,7 +154,7 @@ var controls = (function () {
     modal.classList.remove('off');
   }
 
-  
+
   self.hide = function (modal) {
     console.log('Hide')
     self.lock = false;

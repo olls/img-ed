@@ -115,6 +115,13 @@ var control_defs = {
       a.click();
     }
   },
+  border: {
+    name: 'Border',
+    job: 'modal',
+    title: 'Add Border',
+    extra: 'borders',
+    modal: {}
+  },
   text: {
     name: 'Text',
     job: 'func',

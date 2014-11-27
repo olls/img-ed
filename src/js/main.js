@@ -21,10 +21,15 @@ var img_ed = (function (self) {
     self.load_modal = $('#load');
     self.load_samples_e = $('#load .samples');
     self.load_controls_e = $('#load .controls');
+
     self.shape_modal = $('#shape');
     self.shape_shapes_e = $('#shape .shapes');
+
     self.settings_modal = $('#settings');
     self.settings_controls_e = $('#settings .controls');
+
+    self.border_modal = $('#border');
+    self.border_borders_e = $('#border .borders');
 
     // Add sample image buttons to load modal and shapes to shapes modal.
     self.add_extras();
