@@ -218,6 +218,16 @@ var img_ed = (function () {
 
   // Adds a border to the image.
   self.add_border = function (border_path) {
+    function add_img(ctx, image, x, y, w, h, angle) {
+      ctx.save();
+
+      ctx.translate(x, y);
+      ctx.rotate(angle);
+
+      ctx.drawImage(image, 0, 0, w, h);
+
+      ctx.restore();
+    }
 
     // Load the image into the canvas
     var border = new Image();

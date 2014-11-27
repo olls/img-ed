@@ -22,16 +22,5 @@ function on_once (e, obj, cb) {
   })(cb), false);
 }
 
-function add_img(ctx, image, x, y, w, h, angle) {
-  ctx.save();
-
-  ctx.translate(x, y);
-  ctx.rotate(angle);
-
-  ctx.drawImage(image, 0, 0, w, h);
-
-  ctx.restore();
-}
-
 
 var unq_id = 0;
