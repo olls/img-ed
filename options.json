@@ -1,7 +1,7 @@
 {
     "hosts": {
         "oliverfaircliff": {
-            "output": "/var/www/img-ed",
+            "copy_to": "/var/www/img-ed",
             "url": "http://img-ed.oliverfaircliff.com"
         }
     }
